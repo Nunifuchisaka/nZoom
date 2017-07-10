@@ -1,0 +1,43 @@
+@import "compass";
+
+.nZoom {
+  position: relative;
+  @at-root {
+    #{&}__img {
+      overflow: hidden;
+      position: relative;
+      img {
+        vertical-align: top;
+        pointer-events: none;
+      }
+    }
+    #{&}__lImg {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    #{&}__enable {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 20px;
+      height: 20px;
+      font-size: 0;
+      line-height: 0;
+      background: #000;
+      cursor: pointer;
+    }
+  }
+  &.is_enabled {
+    cursor: move;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+    cursor: grab;
+    &:active {
+      cursor: -moz-grabbing;
+      cursor: -webkit-grabbing;
+      cursor: grabbing;
+    }
+  }
+}
