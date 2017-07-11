@@ -19,6 +19,12 @@
   height: 500px;
   margin: 0 auto;
 }
+
+.zoom_2 {
+  width: 300px;
+  height: 300px;
+  margin: 20px auto 0;
+}
 </style>
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
@@ -50,6 +56,30 @@ $(function(){
   $("#zoom-1").nZoom({
     
   });
+  
+});
+</script>
+
+<div style="margin: 100px"></div>
+
+<div class="zoom_2 nZoom">
+  <div class="zoom_2__img nZoom__img">
+    <img src="//placehold.jp/500x500.png" alt="" width="300" height="300" />
+  </div><div class="nZoom__overlay"></div>
+  <div class="zoom_2__enable nZoom__enable"></div>
+</div>
+
+<div class="zoom_2 nZoom">
+  <div class="zoom_2__img nZoom__img">
+    <img src="//placehold.jp/500x500.png" alt="" width="300" height="300" />
+  </div><div class="nZoom__overlay"></div>
+  <div class="zoom_2__enable nZoom__enable"></div>
+</div>
+
+<script>
+$(function(){
+  
+  $(".zoom_2").nZoom();
   
 });
 </script>
