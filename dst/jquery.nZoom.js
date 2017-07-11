@@ -30,7 +30,7 @@ $.fn.nZoom = function( opts ){
 
 function nZoom( opts ){
   var self = this;
-  _.bindAll(this, "setLargeImg", "enable", "disable", "grabStart", "grabMove", "grabEnd");
+  _.bindAll(this, "setLargeImg", "resetLargeImgCoordinate", "enable", "disable", "grabStart", "grabMove", "grabEnd");
   this.opts = $.extend({
     duration: 500
   }, opts);
@@ -85,9 +85,13 @@ nZoom.prototype.setLargeImg = function(){
   
   this.$img.append(this.$lImg);
   
+  this.resetLargeImgCoordinate();
+}
+
+
+nZoom.prototype.resetLargeImgCoordinate = function(){
   this.lImg_width = this.$lImg.width();
   this.lImg_height = this.$lImg.height();
-  
   this.$lImg.css({
     top: this.el_height_half - Math.round(this.lImg_height/2),
     left: this.el_width_half - Math.round(this.lImg_width/2)
@@ -149,6 +153,7 @@ nZoom.prototype.grabEnd = function(e){
 
 nZoom.prototype.enable = function(){
   this.status.enabled = true;
+  this.resetLargeImgCoordinate();
   this.$el.addClass("is_enabled");
   this.$lImg.fadeIn(this.opts.duration);
   this.$enable.fadeOut(this.opts.duration);
