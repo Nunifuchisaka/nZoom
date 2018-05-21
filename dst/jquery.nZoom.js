@@ -11,15 +11,24 @@
 ;(function($, window, document, undefined){
 'use strict';
 
-$.fn.nZoom = function( opts ){
-  var self = this;
-  return this.each(function( i, el ){
-    var _opts = $.extend({
-      i: i,
-      el: el
-    }, opts);
-    new nZoom(_opts);
-  });
+$.fn.nZoom = function(){
+  var self = this,
+      opt = arguments[0],
+      args = Array.prototype.slice.call(arguments, 1),
+      l = self.length,
+      i,
+      ret;
+  
+  for (i = 0; i < l; i++) {
+    if (typeof opt == 'object' || typeof opt == 'undefined') {
+      self[i].nZoom = new nZoom(self[i], opt);
+    } else {
+      ret = self[i].nZoom[opt].apply(self[i].nZoom, args);
+      if (typeof ret != 'undefined') return ret;
+    }
+  }
+  
+  return self;
 }
 
 
@@ -28,14 +37,14 @@ $.fn.nZoom = function( opts ){
 ## nZoom
 */
 
-function nZoom( opts ){
+function nZoom( el, opts ){
   var self = this;
   _.bindAll(this, "setLargeImg", "resetLargeImgCoordinate", "enable", "disable", "grabStart", "grabMove", "grabEnd");
   this.opts = $.extend({
     duration: 500
   }, opts);
   
-  this.$el = $(this.opts.el);
+  this.$el = $(el);
   this.$img = this.$el.find(".nZoom__img");
   this.$img_s = this.$img.children("img");
   this.$enable = this.$el.find(".nZoom__enable");
@@ -172,6 +181,46 @@ nZoom.prototype.disable = function(){
   this.$el.removeClass("is_enabled");
   this.$lImg.fadeOut(this.opts.duration);
   this.$enable.fadeIn(this.opts.duration);
+  return false;
+}
+
+/*
+## nZoomCarousel
+*/
+
+window.nZoomCarousel = function ( opts ){
+  _.bindAll(this, "setCurrentSlide", "enable");
+  this.opts = $.extend({
+    
+  }, opts);
+  
+  this.$el = $(this.opts.el);
+  this.$enable = this.$el.find(".nZoom__enable");
+  
+  this.currentSlide = 0;
+  
+  this.$zoom = this.$el.find(".nZoom");
+  this.$zoom.nZoom();
+  
+  this.$enable.click(this.enable);
+}
+
+
+/*
+## setCurrentSlide
+*/
+
+nZoomCarousel.prototype.setCurrentSlide = function(currentSlide){
+  this.currentSlide = currentSlide;
+}
+
+
+/*
+## enable
+*/
+
+nZoomCarousel.prototype.enable = function(){
+  this.$zoom.eq( this.currentSlide ).nZoom("enable");
   return false;
 }
 

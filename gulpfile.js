@@ -29,7 +29,8 @@ gulp.task('compass_compile', function(){
 gulp.task('js_compile', function() {
   gulp.src([
       'src/js/110_header.js',
-      'src/js/410_View.js',
+      'src/js/410_nZoom.js',
+      'src/js/410_Carousel.js',
       'src/js/990_footer.js'
     ])
     .pipe(plumber())
