@@ -6,3 +6,20 @@ body {
 h1 {
   text-align: center;
 }
+
+.wrapper_1 {
+  overflow: hidden;
+  width: 100%;
+}
+
+.zoom_1 {
+  width: 500px;
+  height: 500px;
+  margin: 0 auto;
+}
+
+.zoom_2 {
+  width: 300px;
+  height: 300px;
+  margin: 20px auto 0;
+}

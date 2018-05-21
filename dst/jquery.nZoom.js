@@ -37,7 +37,7 @@ function nZoom( opts ){
   
   this.$el = $(this.opts.el);
   this.$img = this.$el.find(".nZoom__img");
-  this.$img_ = this.$img.children("img");
+  this.$img_s = this.$img.children("img");
   this.$enable = this.$el.find(".nZoom__enable");
   
   this.el_width = this.$el.width();
@@ -77,7 +77,7 @@ function nZoom( opts ){
 */
 
 nZoom.prototype.setLargeImg = function(){
-  this.$lImg = this.$img_.clone();
+  this.$lImg = this.$img_s.clone();
   this.$lImg
     .removeAttr("width height")
     .addClass("nZoom__lImg")
