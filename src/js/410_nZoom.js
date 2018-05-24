@@ -153,6 +153,9 @@ nZoom.prototype.enable = function(){
   this.$el.addClass("is_enabled");
   this.$lImg.fadeIn(this.opts.duration);
   this.$enable.fadeOut(this.opts.duration);
+  
+  this.$el.trigger( new $.Event("enable") );
+  
   return false;
 }
 
@@ -168,5 +171,8 @@ nZoom.prototype.disable = function(){
   this.$el.removeClass("is_enabled");
   this.$lImg.fadeOut(this.opts.duration);
   this.$enable.fadeIn(this.opts.duration);
+  
+  this.$el.trigger( new $.Event("disable") );
+  
   return false;
 }
