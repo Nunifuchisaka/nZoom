@@ -39,21 +39,20 @@ $.fn.nZoom = function(){
 
 function nZoom( el, opts ){
   var self = this;
-  _.bindAll(this, "setLargeImg", "resetLargeImgCoordinate", "enable", "disable", "grabStart", "grabMove", "grabEnd");
+  _.bindAll(this, "resize", "setLargeImg", "resetLargeImgCoordinate", "enable", "disable", "grabStart", "grabMove", "grabEnd");
   this.opts = $.extend({
-    duration: 500
+    duration: 500,
+    disableEvent: "mouseleave"
   }, opts);
   
+  //DOM
+  this.$window = $(window);
   this.$el = $(el);
   this.$img = this.$el.find(".nZoom__img");
   this.$img_s = this.$img.children("img");
   this.$enable = this.$el.find(".nZoom__enable");
   
-  this.el_width = this.$el.width();
-  this.el_width_half = Math.round(this.el_width/2);
-  this.el_height = this.$el.height();
-  this.el_height_half = Math.round(this.el_height/2);
-  
+  //Vars
   this.status = {
     enabled: false,
     grabbing: false
@@ -66,17 +65,37 @@ function nZoom( el, opts ){
     left: 0
   };
   
+  this.resize();
+  var resizeTimer = 0;
+  this.$window.on("resize", function(){
+    if(resizeTimer > 0){
+      clearTimeout(resizeTimer);
+    }
+    resizeTimer = setTimeout(self.resize, 200);
+  });
+  
   this.setLargeImg();
   
+  //Event
   this.$enable.click(this.enable);
-  this.$el
-    .on({
-      //"click.nzoom": this.disable,
-      "mousedown.nzoom": this.grabStart,
-      "mousemove.nzoom": this.grabMove,
-      "mouseup.nzoom": this.grabEnd,
-      "mouseleave.nzoom": this.disable
-    });
+  
+  var event = {
+    "mousedown.nzoom": this.grabStart
+    ,"mousemove.nzoom": this.grabMove
+    ,"mouseup.nzoom": this.grabEnd
+    //,"mouseleave.nzoom": this.disable
+  };
+  event[this.opts.disableEvent + ".nzoom"] = this.disable;
+  this.$el.on(event);
+}
+
+
+nZoom.prototype.resize = function(){
+  console.log("resize");
+  this.el_width = this.$el.width();
+  this.el_width_half = Math.round(this.el_width/2);
+  this.el_height = this.$el.height();
+  this.el_height_half = Math.round(this.el_height/2);
 }
 
 
@@ -86,10 +105,9 @@ function nZoom( el, opts ){
 */
 
 nZoom.prototype.setLargeImg = function(){
-  this.$lImg = this.$img_s.clone();
+  this.$lImg = $('<div class="nZoom__lImg" />');
   this.$lImg
-    .removeAttr("width height")
-    .addClass("nZoom__lImg")
+    .append( this.$img_s.clone().removeAttr("width height") )
     .fadeOut(0);
   
   this.$img.append(this.$lImg);
@@ -110,7 +128,7 @@ nZoom.prototype.resetLargeImgCoordinate = function(){
 
 
 /*
-## drag
+## ドラッグイベント
 */
 
 nZoom.prototype.grabStart = function(e){
@@ -157,7 +175,7 @@ nZoom.prototype.grabEnd = function(e){
 
 
 /*
-## enable
+## enable and disable
 */
 
 nZoom.prototype.enable = function(){
@@ -172,11 +190,6 @@ nZoom.prototype.enable = function(){
   return false;
 }
 
-
-
-/*
-## disable
-*/
 
 nZoom.prototype.disable = function(){
   this.status.enabled = false;
